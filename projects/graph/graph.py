@@ -21,23 +21,43 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        edge = self.vertices[v1]
-        # print(edge)
-        edge.add(v2)
-        # self.vertices[v2].add(v1)
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            raise IndexError("The vertex does not exist")
+
+        # edge = self.vertices[v1]
+        # # print(edge)
+        # edge.add(v2)
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # setup que and set root
+        queue = Queue()
+        queue.enqueue(starting_vertex)
+        # track locations
+        visited = set()
+        # loop through q
+        while queue.size() > 0:
+            # return first itemin the queue
+            vertex = queue.dequeue()
+            # if vertex hasnt been visited
+            if vertex not in visited:
+                # mark as visited
+                visited.add(vertex)
+                # loop through the edges
+                for next_vert in self.get_neighbors(vertex):
+                    # add edge to the stack
+                    queue.enqueue(next_vert)
 
     def dft(self, starting_vertex):
         """
@@ -108,6 +128,7 @@ if __name__ == "__main__":
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     """
     print(graph.vertices)
+    print(graph.get_neighbors(4))
 
     """
     Valid BFT paths:
