@@ -52,6 +52,7 @@ class Graph:
             vertex = queue.dequeue()
             # if vertex hasnt been visited
             if vertex not in visited:
+                # print(vertex)
                 # mark as visited
                 visited.add(vertex)
                 # loop through the edges
@@ -64,16 +65,31 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        stack = Stack()
+        stack.push(starting_vertex)
+        visited = set()
+        while stack.size() > 0:
+            vertex = stack.pop()
+            if vertex not in visited:
+                # print(vertex)
+                visited.add(vertex)
+                for next_vert in self.get_neighbors(vertex):
+                    stack.push(next_vert)
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited == None:
+            visited = set()
+        visited.add(starting_vertex)
+        print(starting_vertex)
+        for child in self.vertices[starting_vertex]:
+            if child not in visited:
+                self.dft_recursive(child, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -81,7 +97,28 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        # setup que and set root
+        queue = Queue()
+        queue.enqueue([starting_vertex])
+        # track locations
+        visited = set()
+        # loop through q
+        while queue.size() > 0:
+            # return first itemin the queue
+            path = queue.dequeue()
+            vertex = path[-1]
+            # if vertex hasnt been visited
+            if vertex not in visited:
+                if vertex == destination_vertex:
+                    return path
+                # mark as visited
+                visited.add(vertex)
+                # loop through the edges
+                for next_vert in self.get_neighbors(vertex):
+                    # add edge to the stack
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    queue.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -89,9 +126,23 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+        stack.push([starting_vertex])
+        visited = set()
+        while stack.size() > 0:
+            path = stack.pop()
+            vertex = path[-1]
+            if vertex not in visited:
+                if vertex == destination_vertex:
+                    return path
+                # print(vertex)
+                visited.add(vertex)
+                for next_vert in self.get_neighbors(vertex):
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    stack.push(new_path)
 
-    def dfs_recursive(self, starting_vertex):
+    def dfs_recursive(self, starting_vertex, target_value, visited=None, path=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -99,7 +150,20 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited is None:
+            visited = set()
+        if path is None:
+            path = []
+        visited.add(starting_vertex)
+        path = path + [starting_vertex]
+        if starting_vertex == target_value:
+            return path
+        for child in self.vertices[starting_vertex]:
+            if child not in visited:
+                new_path = self.dfs_recursive(child, target_value, visited, path)
+                if new_path:
+                    return new_path
+        return None
 
 
 if __name__ == "__main__":
