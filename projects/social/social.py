@@ -1,12 +1,28 @@
+import sys
+
+sys.path.append("../graph")
+from graph import Graph
+from util import Stack, Queue, names
+from random import sample
+
+
 class User:
     def __init__(self, name):
         self.name = name
 
+
 class SocialGraph:
+    # try:
+    #     avgerage = self.friendshipCount / self.userCount
+    # except ZeroDivisionError:
+    #     avgerage = 0
+
     def __init__(self):
         self.last_id = 0
         self.users = {}
         self.friendships = {}
+        self.userCount = 0
+        self.friendshipCount = 0
 
     def add_friendship(self, user_id, friend_id):
         """
@@ -19,6 +35,7 @@ class SocialGraph:
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            self.friendshipCount += 1
 
     def add_user(self, name):
         """
@@ -27,8 +44,10 @@ class SocialGraph:
         self.last_id += 1  # automatically increment the ID to assign the new user
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
+        self.userCount += 1
 
     def populate_graph(self, num_users, avg_friendships):
+        # import random
         """
         Takes a number of users and an average number of friendships
         as arguments
@@ -42,6 +61,16 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
+
+        # create 10 friends
+        [self.add_user(i["first_name"]) for i in names[:num_users]]
+        userIds = list(self.users.keys())
+        for userId in userIds:
+            print(userId)
+            connections = sample(userIds, avg_friendships)
+            for i in connections:
+                self.add_friendship(userId, i)
+
         # !!!! IMPLEMENT ME
 
         # Add users
@@ -62,7 +91,7 @@ class SocialGraph:
         return visited
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sg = SocialGraph()
     sg.populate_graph(10, 2)
     print(sg.friendships)
