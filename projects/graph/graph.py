@@ -15,7 +15,8 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex_id] = set()
+        if vertex_id not in self.vertices:
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
@@ -52,7 +53,7 @@ class Graph:
             vertex = queue.dequeue()
             # if vertex hasnt been visited
             if vertex not in visited:
-                # print(vertex)
+                print(vertex)
                 # mark as visited
                 visited.add(vertex)
                 # loop through the edges
@@ -71,7 +72,7 @@ class Graph:
         while stack.size() > 0:
             vertex = stack.pop()
             if vertex not in visited:
-                # print(vertex)
+                print(vertex)
                 visited.add(vertex)
                 for next_vert in self.get_neighbors(vertex):
                     stack.push(next_vert)
